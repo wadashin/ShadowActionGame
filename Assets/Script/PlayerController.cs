@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
         if (diff.magnitude > 0.01f)
         {
             transform.rotation = Quaternion.LookRotation(diff); //Œü‚«‚ğ•ÏX‚·‚é
+            //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             //transform.rotation = new Quaternion(diff.x,0,diff.z,transform.rotation.w);
             //transform.eulerAngles = new Vector3(diff.x, diff.y, diff.z);
         }
