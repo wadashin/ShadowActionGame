@@ -49,9 +49,9 @@ public class PlayerController : MonoBehaviour
         //ベクトルの大きさが0.01以上の時に向きを変える処理をし走りアニメーションを再生する
         if (diff.magnitude > 0.01f)
         {
-            //transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
+            transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
             //transform.rotation = new Quaternion(diff.x,0,diff.z,transform.rotation.w);
-            transform.eulerAngles = new Vector3(diff.x, diff.y, diff.z);
+            //transform.eulerAngles = new Vector3(diff.x, diff.y, diff.z);
         }
     }
 
