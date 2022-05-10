@@ -34,8 +34,9 @@ public class PlayerController : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        _dir = Vector3.forward * v + Vector3.right * h;
+        _dir = (Vector3.forward * v + Vector3.right * h ).normalized;
         _dir = _playerCam.transform.TransformDirection(_dir);
+
 
         //Vector3 diff = transform.position - _latestPos;   //前回からどこに進んだかをベクトルで取得
         //_latestPos = transform.position;  //前回のPositionの更新
@@ -57,26 +58,35 @@ public class PlayerController : MonoBehaviour
             //transform.rotation = new Quaternion(diff.x,0,diff.z,transform.rotation.w);
             //transform.eulerAngles = new Vector3(diff.x, diff.y, diff.z);
         }
+
+        //アニメーション管理の関数
+        AnimControlMethod();
     }
 
     private void FixedUpdate()
     {
-        if(_moveSwitch)
+        if (_moveSwitch)
         {
             if (_rb.velocity.magnitude < _moveMaxSpeed)
             {
                 _rb.AddForce(_dir.normalized * _movePower, ForceMode.Force);
 
-                
+
             }
         }
     }
 
     void AnimControlMethod()
     {
-        if(h <= 0 && v <= 0)
+        _anim.SetFloat("Speed", _rb.velocity.magnitude);
+
+        if (h == 0 && v == 0)
         {
-            _anim.SetFloat("A_Run", _rb.velocity.magnitude);
+            _anim.SetBool("Walk", false);
+        }
+        else
+        {
+            _anim.SetBool("Walk", true);
         }
     }
 }

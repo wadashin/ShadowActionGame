@@ -786,7 +786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a39eaae69efe6a4b9b7eadcdd5db27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePower: 50
+  _movePower: 70
   _moveMaxSpeed: 8
   _playerCam: {fileID: 963194227}
 --- !u!1 &1419791562 stripped
