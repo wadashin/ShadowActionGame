@@ -82,11 +82,11 @@ public class PlayerController : MonoBehaviour
 
         if (h == 0 && v == 0)
         {
-            _anim.SetBool("Walk", false);
+            _anim.SetBool("Move", false);
         }
         else
         {
-            _anim.SetBool("Walk", true);
+            _anim.SetBool("Move", true);
         }
     }
 }
