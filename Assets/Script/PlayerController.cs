@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody _rb;
 
+    Animator _anim;
+
     //ˆÚ“®‚É‰Á‚¦‚é—Í‚Æ‘¬“x‚ÌÅ‘å’l
     [SerializeField] float _movePower;
     [SerializeField] float _moveMaxSpeed;
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -66,6 +69,14 @@ public class PlayerController : MonoBehaviour
 
                 
             }
+        }
+    }
+
+    void AnimControlMethod()
+    {
+        if(h <= 0 && v <= 0)
+        {
+            _anim.SetFloat("A_Run", _rb.velocity.magnitude);
         }
     }
 }
