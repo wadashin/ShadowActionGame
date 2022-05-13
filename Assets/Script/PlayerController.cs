@@ -37,27 +37,22 @@ public class PlayerController : MonoBehaviour
         _dir = (Vector3.forward * v + Vector3.right * h ).normalized;
         _dir = _playerCam.transform.TransformDirection(_dir);
 
-
-        //Vector3 diff = transform.position - _latestPos;   //前回からどこに進んだかをベクトルで取得
-        //_latestPos = transform.position;  //前回のPositionの更新
-
-
-
-        //    //transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
-        //    transform.eulerAngles = new Vector3(diff.x, 0, diff.z);
-
-
-        Vector3 diff = transform.position - _latestPos;   //前回からどこに進んだかをベクトルで取得
-        _latestPos = transform.position;  //前回のPositionの更新
+        //前回からどこに進んだかをベクトルで取得
+        Vector3 diff = transform.position - _latestPos;
+        //前回のPositionの更新
+        _latestPos = transform.position;  
 
         //ベクトルの大きさが0.01以上の時に向きを変える処理をし走りアニメーションを再生する
         if (diff.magnitude > 0.01f)
         {
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
-            //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-            //transform.rotation = new Quaternion(diff.x,0,diff.z,transform.rotation.w);
-            //transform.eulerAngles = new Vector3(diff.x, diff.y, diff.z);
         }
+
+
+
+
+
+
 
         //アニメーション管理の関数
         AnimControlMethod();
@@ -76,8 +71,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //アニメーション遷移の管理
     void AnimControlMethod()
     {
+        //移動系
         _anim.SetFloat("Speed", _rb.velocity.magnitude);
 
         if (h == 0 && v == 0)
@@ -88,5 +85,12 @@ public class PlayerController : MonoBehaviour
         {
             _anim.SetBool("Move", true);
         }
+
+        //ローリング
+        if(Input.GetButtonDown("Roll"))
+        {
+            Debug.Log(1);
+        }
     }
+
 }
