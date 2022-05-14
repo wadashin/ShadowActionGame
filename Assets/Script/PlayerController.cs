@@ -6,7 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     float h;
     float v;
+
     bool _moveSwitch = true;
+    bool _rollSwitc = true;
 
     Vector3 _dir;
     Vector3 _latestPos;
@@ -89,8 +91,13 @@ public class PlayerController : MonoBehaviour
         //ÉçÅ[ÉäÉìÉO
         if(Input.GetButtonDown("Roll"))
         {
-            Debug.Log(1);
+            _anim.SetTrigger("Roll");
         }
     }
 
+
+    void RollSwitch()
+    {
+
+    }
 }
