@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     float v;
 
     bool _moveSwitch = true;
-    bool _rollSwitc = true;
+    bool _rollSwitch = false;
+    bool _slideSwitch = false;
 
     Vector3 _dir;
     Vector3 _latestPos;
@@ -36,13 +37,13 @@ public class PlayerController : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        _dir = (Vector3.forward * v + Vector3.right * h ).normalized;
+        _dir = (Vector3.forward * v + Vector3.right * h).normalized;
         _dir = _playerCam.transform.TransformDirection(_dir);
 
         //前回からどこに進んだかをベクトルで取得
         Vector3 diff = transform.position - _latestPos;
         //前回のPositionの更新
-        _latestPos = transform.position;  
+        _latestPos = transform.position;
 
         //ベクトルの大きさが0.01以上の時に向きを変える処理をし走りアニメーションを再生する
         if (diff.magnitude > 0.01f)
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
         }
 
-
+        Debug.Log(_slideSwitch);
 
 
 
@@ -88,16 +89,63 @@ public class PlayerController : MonoBehaviour
             _anim.SetBool("Move", true);
         }
 
+
         //ローリング
-        if(Input.GetButtonDown("Roll"))
+        if (_rollSwitch)
         {
-            _anim.SetTrigger("Roll");
+            if (Input.GetButtonDown("Roll"))
+            {
+                _anim.SetTrigger("Roll");
+            }
+        }
+
+        //スライディング
+        if (_slideSwitch)
+        {
+            if (Input.GetButtonDown("Slide"))
+            {
+                _anim.SetTrigger("Slide");
+            }
         }
     }
 
-
+    //ローリング可能不可能の切り替え
     void RollSwitch()
     {
-
+        //三項演算子でtrueの時はfalse、falseの時はtrueに変える
+        _rollSwitch = _rollSwitch ? _rollSwitch = false : _rollSwitch = true;
+        Debug.Log(_rollSwitch);
     }
+
+    void On(string x)
+    {
+        if (x == "Roll")
+        {
+            _rollSwitch = true;
+        }
+        else if (x == "Move")
+        {
+            _moveSwitch = true;
+        }
+        else if (x == "Slide")
+        {
+            _slideSwitch = true;
+        }
+    }
+    void Off(string x)
+    {
+        if (x == "Roll")
+        {
+            _rollSwitch = false;
+        }
+        else if (x == "Move")
+        {
+            _moveSwitch = false;
+        }
+        else if (x == "Slide")
+        {
+            _slideSwitch = false;
+        }
+    }
+
 }
