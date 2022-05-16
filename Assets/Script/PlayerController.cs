@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run"))
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run") && !_anim.IsInTransition(0))
         {
             if (Input.GetButtonDown("Slide"))
             {
@@ -136,4 +136,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void AddForse(float a)
+    {
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(transform.forward * a, ForceMode.Impulse);
+    }
 }

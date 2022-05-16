@@ -49511,6 +49511,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.033333335
+    functionName: AddForse
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 23
+    intParameter: 0
+    messageOptions: 0
   - time: 0.7
     functionName: On
     data: Move
