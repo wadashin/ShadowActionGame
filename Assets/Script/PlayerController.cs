@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
 
     bool _moveSwitch = true;
     bool _rollSwitch = false;
-    bool _slideSwitch = false;
 
     Vector3 _dir;
     Vector3 _latestPos;
@@ -50,10 +49,6 @@ public class PlayerController : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
         }
-
-        Debug.Log(_slideSwitch);
-
-
 
 
 
@@ -99,8 +94,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //スライディング
-        if (_slideSwitch)
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run"))
         {
             if (Input.GetButtonDown("Slide"))
             {
@@ -127,10 +121,6 @@ public class PlayerController : MonoBehaviour
         {
             _moveSwitch = true;
         }
-        else if (x == "Slide")
-        {
-            _slideSwitch = true;
-        }
     }
     void Off(string x)
     {
@@ -141,10 +131,6 @@ public class PlayerController : MonoBehaviour
         else if (x == "Move")
         {
             _moveSwitch = false;
-        }
-        else if (x == "Slide")
-        {
-            _slideSwitch = false;
         }
     }
 
