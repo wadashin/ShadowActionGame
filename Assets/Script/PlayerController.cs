@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
         //前回からどこに進んだかをベクトルで取得
         Vector3 diff = transform.position - _latestPos;
+        //横にしか回転しないようにする
+        diff = new Vector3(diff.x, 0, diff.z);
         //前回のPositionの更新
         _latestPos = transform.position;
 
