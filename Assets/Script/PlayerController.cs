@@ -9,10 +9,16 @@ public class PlayerController : MonoBehaviour
 
     bool _moveSwitch = true;
     bool _rollSwitch = false;
-    bool _jumpSwitch = false;
+    bool _jumpSwitch = true;
+    bool _onPlaceSwitch;
 
     Vector3 _dir;
     Vector3 _latestPos;
+    //接地判定のレイの発射位置
+    Vector3 rayPos;
+
+    //接地判定のレイ
+    //Ray ray;
 
     Rigidbody _rb;
 
@@ -25,10 +31,15 @@ public class PlayerController : MonoBehaviour
     //プレイヤー視点を映すカメラ
     [SerializeField] Camera _playerCam;
 
+    //接地判定の距離
+    [SerializeField] float _distance = 1;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponent<Animator>();
+
+        
     }
 
     // Update is called once per frame
@@ -53,10 +64,11 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
         }
 
-        Debug.Log(_moveSwitch);
 
         //アニメーション管理の関数
         AnimControlMethod();
+        //接地判定の関数
+        OnPlace();
     }
 
     private void FixedUpdate()
@@ -105,15 +117,45 @@ public class PlayerController : MonoBehaviour
                 _anim.SetTrigger("Slide");
             }
         }
-
+        
         //ジャンプ
-        if(_jumpSwitch)
+        if (_jumpSwitch && _onPlaceSwitch)
         {
-            if(Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 _anim.SetTrigger("Jump");
             }
         }
+        if (_onPlaceSwitch)
+        {
+            _anim.SetBool("OnPlace", true);
+        }
+        else
+        {
+            _anim.SetBool("OnPlace", false);
+        }
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+        {
+            _anim.SetTrigger("OnPlace2");
+        }
+    }
+
+    void OnPlace()
+    {
+        //接地判定のレイの発射位置をplayerの位置にする
+        rayPos = transform.position;// + new Vector3(0,-0.1f,0);
+
+        //接地判定のレイを下に向ける
+        Ray ray = new Ray(rayPos, Vector3.down);
+
+        //接地判定
+        _onPlaceSwitch = Physics.Raycast(ray, _distance);
+
+
+        Debug.DrawRay(rayPos, Vector3.down * _distance, Color.red);
     }
 
     //ローリング可能不可能の切り替え
@@ -155,9 +197,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void AddForse(float a)
+    void AddForseForward(float a)
     {
         _rb.velocity = Vector3.zero;
         _rb.AddForce(transform.forward * a, ForceMode.Impulse);
+    }
+
+    void AddForseUp(float a)
+    {
+        //_rb.velocity = Vector3.zero;
+        _rb.AddForce(transform.up * a, ForceMode.Impulse);
     }
 }
