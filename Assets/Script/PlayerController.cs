@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
         }
 
-
+        Debug.Log(_moveSwitch);
 
         //アニメーション管理の関数
         AnimControlMethod();
