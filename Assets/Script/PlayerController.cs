@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     bool _moveSwitch = true;
     bool _rollSwitch = false;
+    bool _jumpSwitch = false;
 
     Vector3 _dir;
     Vector3 _latestPos;
@@ -96,11 +97,21 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //スライディング
         if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run") && !_anim.IsInTransition(0))
         {
             if (Input.GetButtonDown("Slide"))
             {
                 _anim.SetTrigger("Slide");
+            }
+        }
+
+        //ジャンプ
+        if(_jumpSwitch)
+        {
+            if(Input.GetButtonDown("Jump"))
+            {
+                _anim.SetTrigger("Jump");
             }
         }
     }
@@ -123,6 +134,10 @@ public class PlayerController : MonoBehaviour
         {
             _moveSwitch = true;
         }
+        else if(x == "Jump")
+        {
+            _jumpSwitch = true;
+        }
     }
     void Off(string x)
     {
@@ -133,6 +148,10 @@ public class PlayerController : MonoBehaviour
         else if (x == "Move")
         {
             _moveSwitch = false;
+        }
+        else if (x == "Jump")
+        {
+            _jumpSwitch = false;
         }
     }
 
