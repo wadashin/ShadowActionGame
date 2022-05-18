@@ -301,7 +301,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 492006410}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a0d330dc4bcfc3a479093013b22dbf7c, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1151,10 +1151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a39eaae69efe6a4b9b7eadcdd5db27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movePower: 80
+  _movePower: 90
   _moveMaxSpeed: 15
   _playerCam: {fileID: 963194227}
-  _distance: 0.1
+  _distance: 0.2
 --- !u!1 &1419791562 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
@@ -1481,8 +1481,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1836565933}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.709, y: 1.84, z: 1.94}
-  m_LocalScale: {x: 9.260386, y: 1, z: 0.79316}
+  m_LocalPosition: {x: 1.709, y: 1.9, z: 1.94}
+  m_LocalScale: {x: 9.260386, y: 0.2454, z: 0.79316}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

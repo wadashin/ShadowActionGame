@@ -27244,6 +27244,6 @@ AnimationClip:
     functionName: AddForseUp
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 5
+    floatParameter: 7
     intParameter: 0
     messageOptions: 0
