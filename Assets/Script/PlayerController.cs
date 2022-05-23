@@ -48,8 +48,16 @@ public class PlayerController : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        _dir = (Vector3.forward * v + Vector3.right * h).normalized;
-        _dir = _playerCam.transform.TransformDirection(_dir);
+        if (h < 0.5f && v < 0.5f)
+        {
+            _dir = (Vector3.forward * v / 2 + Vector3.right * h / 2).normalized;
+            _dir = _playerCam.transform.TransformDirection(_dir);
+        }
+        else
+        {
+            _dir = (Vector3.forward * v + Vector3.right * h).normalized;
+            _dir = _playerCam.transform.TransformDirection(_dir);
+        }
 
         //前回からどこに進んだかをベクトルで取得
         Vector3 diff = transform.position - _latestPos;
@@ -78,8 +86,6 @@ public class PlayerController : MonoBehaviour
             if (_rb.velocity.magnitude < _moveMaxSpeed)
             {
                 _rb.AddForce(_dir.normalized * _movePower, ForceMode.Force);
-
-
             }
         }
     }
@@ -89,6 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         //移動系
         _anim.SetFloat("Speed", _rb.velocity.magnitude);
+        Debug.Log(_rb.velocity.magnitude);
 
         if (h == 0 && v == 0)
         {
@@ -163,7 +170,6 @@ public class PlayerController : MonoBehaviour
     {
         //三項演算子でtrueの時はfalse、falseの時はtrueに変える
         _rollSwitch = _rollSwitch ? _rollSwitch = false : _rollSwitch = true;
-        Debug.Log(_rollSwitch);
     }
 
     void On(string x)
