@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     bool _rollSwitch = false;
     bool _jumpSwitch = true;
     bool _onPlaceSwitch;
+    bool _attackSwitch = true;
 
     Vector3 _dir;
     Vector3 _latestPos;
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponent<Animator>();
 
-        
+
     }
 
     // Update is called once per frame
@@ -48,14 +49,24 @@ public class PlayerController : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        if (h < 0.5f && v < 0.5f)
+        if (h == 0 && v == 0)
         {
             _dir = (Vector3.forward * v / 2 + Vector3.right * h / 2).normalized;
             _dir = _playerCam.transform.TransformDirection(_dir);
         }
-        else
+        //else if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+        //{
+        //    _dir = (Vector3.forward * v / 10 + Vector3.right * h / 10).normalized;
+        //    _dir = _playerCam.transform.TransformDirection(_dir);
+        //}
+        else if (_onPlaceSwitch)
         {
             _dir = (Vector3.forward * v + Vector3.right * h).normalized;
+            _dir = _playerCam.transform.TransformDirection(_dir);
+        }
+        else
+        {
+            _dir = (Vector3.forward * v / 10 + Vector3.right * h / 10).normalized;
             _dir = _playerCam.transform.TransformDirection(_dir);
         }
 
@@ -101,7 +112,7 @@ public class PlayerController : MonoBehaviour
         {
             _anim.SetBool("Move", false);
         }
-        else
+        else if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_idle"))
         {
             _anim.SetBool("Move", true);
         }
@@ -124,7 +135,7 @@ public class PlayerController : MonoBehaviour
                 _anim.SetTrigger("Slide");
             }
         }
-        
+
         //ƒWƒƒƒ“ƒv
         if (_jumpSwitch && _onPlaceSwitch)
         {
@@ -141,11 +152,26 @@ public class PlayerController : MonoBehaviour
         {
             _anim.SetBool("OnPlace", false);
         }
+
+        if (Input.GetButtonDown("Attack1"))
+        {
+            //if (_attackSwitch)
+            //{
+                _anim.SetTrigger("Attack1");
+                //_attackSwitch = false;
+            //}
+        }
+    }
+
+    public void AttackTrue()
+    {
+        _attackSwitch = true;
     }
     private void OnCollisionStay(Collision collision)
     {
         if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
         {
+
             _anim.SetTrigger("OnPlace2");
         }
     }
@@ -182,7 +208,7 @@ public class PlayerController : MonoBehaviour
         {
             _moveSwitch = true;
         }
-        else if(x == "Jump")
+        else if (x == "Jump")
         {
             _jumpSwitch = true;
         }
