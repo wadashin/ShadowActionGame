@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
         //前回のPositionの更新
         _latestPos = transform.position;
 
-        //ベクトルの大きさが0.01以上の時に向きを変える処理をし走りアニメーションを再生する
+        
         if (diff.magnitude > 0.01f)
         {
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
