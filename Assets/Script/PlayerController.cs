@@ -39,8 +39,6 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponent<Animator>();
-
-
     }
 
     // Update is called once per frame
@@ -237,7 +235,7 @@ public class PlayerController : MonoBehaviour
 
     void AddForseUp(float a)
     {
-        //_rb.velocity = Vector3.zero;
+        _rb.velocity = Vector3.zero;
         _rb.AddForce(transform.up * a, ForceMode.Impulse);
     }
 }
