@@ -6,6 +6,7 @@ public class PlayerManagement : MonoBehaviour
 {
     PlayerMove playerMove;
     PlayerStatus playerStatus;
+    public AnimationCtrl animationCtrl;
 
     [SerializeField]
     Camera _playerCam;
@@ -47,6 +48,7 @@ public class PlayerManagement : MonoBehaviour
     {
         playerMove = GetComponent<PlayerMove>();
         playerStatus = GetComponent<PlayerStatus>();
+        animationCtrl = GetComponent<AnimationCtrl>();
     }
     void Start()
     {

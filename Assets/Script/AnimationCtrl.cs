@@ -11,7 +11,7 @@ using UnityEngine;
 /// NOTE: Motion Blendを使用するものは、適宜派生させること
 /// NOTE: 汎化させるよりは、仕様が同じものをまとめて特化させた方がオーバヘッドが少ないので、そうした方がよい(Player、NPC、Enemy、Bossなど)
 /// </summary>
-class AnimationCtrl : MonoBehaviour
+public class AnimationCtrl : MonoBehaviour
 {
     public struct AnimStack
     {

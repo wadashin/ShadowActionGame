@@ -11,9 +11,10 @@ public class PlayerMove : MonoBehaviour
 
     bool _onPlaceSwitch;
     bool _moveSwitch = true;
-    bool _rollSwitch = false;
+    bool _rollSwitch = true;
     bool _jumpSwitch = true;
 
+    bool _idling = true;
 
     Vector3 _dir;
     Vector3 rayPos;
@@ -37,26 +38,28 @@ public class PlayerMove : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        if (h == 0 && v == 0)
-        {
-            _dir = (Vector3.forward * v / 2 + Vector3.right * h / 2).normalized;
-            _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
-        }
+        //if (h == 0 && v == 0)
+        //{
+        //    _dir = (Vector3.forward * v / 2 + Vector3.right * h / 2).normalized;
+        //    _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
+        //}
         //else if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
         //{
         //    _dir = (Vector3.forward * v / 10 + Vector3.right * h / 10).normalized;
         //    _dir = _playerCam.transform.TransformDirection(_dir);
         //}
-        else if (_onPlaceSwitch)
-        {
+
+        //if (_onPlaceSwitch)
+        //{
             _dir = (Vector3.forward * v + Vector3.right * h).normalized;
             _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
-        }
-        else
-        {
-            _dir = (Vector3.forward * v / 10 + Vector3.right * h / 10).normalized;
-            _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
-        }
+        //}
+
+        //else
+        //{
+        //    _dir = (Vector3.forward * v / 10 + Vector3.right * h / 10).normalized;
+        //    _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
+        //}
 
 
         ////////////////////移動に応じた向きの変更機能////////////////////
@@ -105,62 +108,113 @@ public class PlayerMove : MonoBehaviour
 
     void AnimControlMethod()
     {
+        Debug.Log(_idling);
+        if(_idling)
+        {
+            if (Mathf.Abs(h) + Mathf.Abs(v) > 0.04f)
+            {
+                playerManagement.animationCtrl.Play("A_Run");
+            }
+            else
+            {
+                playerManagement.animationCtrl.Play("A_idle");
+            }
+        }
+        
+
+        if (Input.GetButtonDown("Roll"))
+        {
+            _idling = false;
+            playerManagement.animationCtrl.Play("A_roll_front");
+            playerManagement.animationCtrl.SetPlaybackDelegate(Sawadanosio);
+        }
+
+
         //移動系
-        _anim.SetFloat("Speed", _rb.velocity.magnitude);
-        Debug.Log(_rb.velocity.magnitude);
+        //_anim.SetFloat("Speed", _rb.velocity.magnitude);
 
-        if (h == 0 && v == 0)
-        {
-            _anim.SetBool("Move", false);
-        }
-        else if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_idle"))
-        {
-            _anim.SetBool("Move", true);
-        }
+        //if (h == 0 && v == 0)
+        //{
+        //    _anim.SetBool("Move", false);
+        //}
+        //else if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_idle"))
+        //{
+        //    _anim.SetBool("Move", true);
+        //}
 
 
-        //ローリング
-        if (_rollSwitch)
-        {
-            if (Input.GetButtonDown("Roll"))
-            {
-                _anim.SetTrigger("Roll");
-            }
-        }
+        ////////////////////////////////////////////////////////////////////////要改善
+        ////ローリング
+        //if (Input.GetButtonDown("Roll"))
+        //{
+        //    if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_idle") || _anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run"))
+        //    {
+        //        _anim.SetTrigger("Roll");
+        //    }
+        //}
 
-        //スライディング
-        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run") && !_anim.IsInTransition(0))
-        {
-            if (Input.GetButtonDown("Slide"))
-            {
-                _anim.SetTrigger("Slide");
-            }
-        }
+        ////スライディング
+        //if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run") && !_anim.IsInTransition(0))
+        //{
+        //    if (Input.GetButtonDown("Slide"))
+        //    {
+        //        _anim.SetTrigger("Slide");
+        //    }
+        //}
 
-        //ジャンプ
-        if (_jumpSwitch && _onPlaceSwitch)
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                _anim.SetTrigger("Jump");
-            }
-        }
-        if (_onPlaceSwitch)
-        {
-            _anim.SetBool("OnPlace", true);
-        }
-        else
-        {
-            _anim.SetBool("OnPlace", false);
-        }
 
-        if (Input.GetButtonDown("Attack1"))
+
+        ////ジャンプ
+        //if (_jumpSwitch && _onPlaceSwitch)
+        //{
+        //    if (Input.GetButtonDown("Jump"))
+        //    {
+        //        _anim.SetTrigger("Jump");
+        //    }
+        //}
+        //if (_onPlaceSwitch)
+        //{
+        //    _anim.SetBool("OnPlace", true);
+        //}
+        //else
+        //{
+        //    _anim.SetBool("OnPlace", false);
+        //}
+
+    }
+    void Sawadanosio()
+    {
+        _idling = false;
+    }
+
+    void On(string x)
+    {
+        if (x == "Roll")
         {
-            //if (_attackSwitch)
-            //{
-            _anim.SetTrigger("Attack1");
-            //_attackSwitch = false;
-            //}
+            _rollSwitch = true;
+        }
+        else if (x == "Move")
+        {
+            _moveSwitch = true;
+        }
+        else if (x == "Jump")
+        {
+            _jumpSwitch = true;
+        }
+    }
+    void Off(string x)
+    {
+        if (x == "Roll")
+        {
+            _rollSwitch = false;
+        }
+        else if (x == "Move")
+        {
+            _moveSwitch = false;
+        }
+        else if (x == "Jump")
+        {
+            _jumpSwitch = false;
         }
     }
 }
