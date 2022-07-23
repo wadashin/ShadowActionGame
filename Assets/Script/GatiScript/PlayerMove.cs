@@ -11,18 +11,22 @@ public class PlayerMove : MonoBehaviour
 
     bool _onPlaceSwitch;
     bool _moveSwitch = true;
+    bool _rollSwitch = false;
+    bool _jumpSwitch = true;
 
 
     Vector3 _dir;
     Vector3 rayPos;
     Vector3 _latestPos;
     Rigidbody _rb;
+    Animator _anim;
 
     PlayerManagement playerManagement;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _anim = GetComponent<Animator>();
         playerManagement = GetComponent<PlayerManagement>();
     }
 
@@ -69,6 +73,8 @@ public class PlayerMove : MonoBehaviour
 
         ////////////////////関数群////////////////////
         OnPlace();
+
+        AnimControlMethod();
     }
 
     private void FixedUpdate()
@@ -95,5 +101,66 @@ public class PlayerMove : MonoBehaviour
 
 
         Debug.DrawRay(rayPos, Vector3.down * playerManagement.GroundDistance, Color.red);
+    }
+
+    void AnimControlMethod()
+    {
+        //移動系
+        _anim.SetFloat("Speed", _rb.velocity.magnitude);
+        Debug.Log(_rb.velocity.magnitude);
+
+        if (h == 0 && v == 0)
+        {
+            _anim.SetBool("Move", false);
+        }
+        else if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_idle"))
+        {
+            _anim.SetBool("Move", true);
+        }
+
+
+        //ローリング
+        if (_rollSwitch)
+        {
+            if (Input.GetButtonDown("Roll"))
+            {
+                _anim.SetTrigger("Roll");
+            }
+        }
+
+        //スライディング
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run") && !_anim.IsInTransition(0))
+        {
+            if (Input.GetButtonDown("Slide"))
+            {
+                _anim.SetTrigger("Slide");
+            }
+        }
+
+        //ジャンプ
+        if (_jumpSwitch && _onPlaceSwitch)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                _anim.SetTrigger("Jump");
+            }
+        }
+        if (_onPlaceSwitch)
+        {
+            _anim.SetBool("OnPlace", true);
+        }
+        else
+        {
+            _anim.SetBool("OnPlace", false);
+        }
+
+        if (Input.GetButtonDown("Attack1"))
+        {
+            //if (_attackSwitch)
+            //{
+            _anim.SetTrigger("Attack1");
+            //_attackSwitch = false;
+            //}
+        }
     }
 }
