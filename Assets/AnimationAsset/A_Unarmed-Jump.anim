@@ -27241,9 +27241,9 @@ AnimationClip:
   m_HasMotionFloatCurves: 1
   m_Events:
   - time: 0
-    functionName: AddForseUp
+    functionName: AddForceUp
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 7
+    floatParameter: 15
     intParameter: 0
     messageOptions: 0

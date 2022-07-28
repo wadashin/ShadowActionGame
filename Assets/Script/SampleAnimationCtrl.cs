@@ -11,7 +11,8 @@ using UnityEngine;
 /// NOTE: Motion Blendを使用するものは、適宜派生させること
 /// NOTE: 汎化させるよりは、仕様が同じものをまとめて特化させた方がオーバヘッドが少ないので、そうした方がよい(Player、NPC、Enemy、Bossなど)
 /// </summary>
-public class AnimationCtrl : MonoBehaviour
+public class SampleAnimationCtrl : MonoBehaviour
+
 {
     public struct AnimStack
     {
@@ -25,7 +26,6 @@ public class AnimationCtrl : MonoBehaviour
 
     int _targetLayer = 0;
     Callback _callback = null;
-    string _animState = null;
 
     Queue<AnimStack> _animQueue = new Queue<AnimStack>();
 
@@ -62,7 +62,7 @@ public class AnimationCtrl : MonoBehaviour
     {
         Active();
         _animator.CrossFade(stateName, dur);
-        //Debug.Log("Play:" + stateName);
+        Debug.Log("Play:" + stateName);
     }
 
     /// <summary>
@@ -85,17 +85,21 @@ public class AnimationCtrl : MonoBehaviour
     public bool IsPlayingAnimation(int layer = 0)
     {
         var state = _animator.GetCurrentAnimatorStateInfo(layer);
-        if (state.loop) return true; //ループは永遠にtrue帰る
+        //if (state.loop) return true; //ループは永遠にtrue帰る
         return state.normalizedTime < 1.0f;
     }
 
-    //public bool IsPlayingAnimation(int layer = 0)
-    //{
-    //    if (_duration > 0.0f) return true;
-    //    var state = _animator.GetCurrentAnimatorStateInfo(layer);
-    //    if (state.loop) return true; //ループは永遠にtrue帰る
-    //    return state.normalizedTime < 1.0f;
-    //}
+    /*
+    /// <summary>
+    /// 対象レイヤーのアニメーションがループアニメかどうかを返す
+    /// </summary>
+    /// <param name="layer">レイヤーID、基本は0で省略すると0が入る</param>
+    /// <returns></returns>
+    public bool IsLoop(int layer = 0)
+    {
+        return _animator.GetCurrentAnimatorStateInfo(layer).loop;
+    }
+    */
 
     /// <summary>
     /// 再生終了時のコールバックを設定する
@@ -107,6 +111,8 @@ public class AnimationCtrl : MonoBehaviour
         _callback = cb;
         _targetLayer = target;
     }
+
+    
 
 
 
@@ -126,7 +132,6 @@ public class AnimationCtrl : MonoBehaviour
             }
         }
 
-
         if (_callback != null)
         {
             if (!IsPlayingAnimation(_targetLayer))
@@ -135,15 +140,5 @@ public class AnimationCtrl : MonoBehaviour
                 _callback = null;
             }
         }
-
-        if (_animState != null)
-        {
-            if (!IsPlayingAnimation(_targetLayer))
-            {
-                Play(_animState);
-                _animState = null;
-            }
-        }
     }
-
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,7 @@ public class PlayerMove : MonoBehaviour
     float v;
 
     bool _onPlaceSwitch;
+    bool _jumpFin = true;
     bool _moveSwitch = true;
     bool _rollSwitch = true;
     bool _jumpSwitch = true;
@@ -34,7 +35,7 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ////////////////////í‚é~éûÇ∆ê⁄ínéûÇÃà⁄ìÆë¨ìxÇÃêÿÇËë÷Ç¶////////////////////
+        ////////////////////ÂÅúÊ≠¢ÊôÇ„Å®Êé•Âú∞ÊôÇ„ÅÆÁßªÂãïÈÄüÂ∫¶„ÅÆÂàá„ÇäÊõø„Åà////////////////////
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
@@ -49,32 +50,32 @@ public class PlayerMove : MonoBehaviour
         //    _dir = _playerCam.transform.TransformDirection(_dir);
         //}
 
-        //if (_onPlaceSwitch)
-        //{
+        if (_onPlaceSwitch)
+        {
             _dir = (Vector3.forward * v + Vector3.right * h).normalized;
+            _dir = new Vector3(_dir.x, _rb.velocity.y, _dir.z);
             _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
-        //}
+        }
+        else
+        {
+            _dir = (Vector3.forward * v + Vector3.right * h).normalized;
+            //_dir += new Vector3(0, _rb.velocity.y, 0);
+            _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
+        }
 
-        //else
-        //{
-        //    _dir = (Vector3.forward * v / 10 + Vector3.right * h / 10).normalized;
-        //    _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
-        //}
-
-
-        ////////////////////à⁄ìÆÇ…âûÇ∂ÇΩå¸Ç´ÇÃïœçXã@î\////////////////////
-        //ëOâÒÇ©ÇÁÇ«Ç±Ç…êiÇÒÇæÇ©ÇÉxÉNÉgÉãÇ≈éÊìæ
+        ////////////////////ÁßªÂãï„Å´Âøú„Åò„ÅüÂêë„Åç„ÅÆÂ§âÊõ¥Ê©üËÉΩ////////////////////
+        //ÂâçÂõû„Åã„Çâ„Å©„Åì„Å´ÈÄ≤„Çì„Å†„Åã„Çí„Éô„ÇØ„Éà„É´„ÅßÂèñÂæó
         Vector3 diff = transform.position - _latestPos;
-        //â°Ç…ÇµÇ©âÒì]ÇµÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
+        //Ê®™„Å´„Åó„ÅãÂõûËª¢„Åó„Å™„ÅÑ„Çà„ÅÜ„Å´„Åô„Çã
         diff = new Vector3(diff.x, 0, diff.z);
-        //ëOâÒÇÃPositionÇÃçXêV
+        //ÂâçÂõû„ÅÆPosition„ÅÆÊõ¥Êñ∞
         _latestPos = transform.position;
         if (diff.magnitude > 0.01f)
         {
-            transform.rotation = Quaternion.LookRotation(diff); //å¸Ç´ÇïœçXÇ∑ÇÈ
+            transform.rotation = Quaternion.LookRotation(diff); //Âêë„Åç„ÇíÂ§âÊõ¥„Åô„Çã
         }
 
-        ////////////////////ä÷êîåQ////////////////////
+        ////////////////////Èñ¢Êï∞Áæ§////////////////////
         OnPlace();
 
         AnimControlMethod();
@@ -82,55 +83,90 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_moveSwitch)
+        if (_jumpSwitch)
         {
-            if (_rb.velocity.magnitude < playerManagement.MoveMaxSpeed)
+            if (_moveSwitch)
             {
-                _rb.AddForce(_dir.normalized * playerManagement.MovePower, ForceMode.Force);
+                if (_rb.velocity.magnitude < playerManagement.MoveMaxSpeed)
+                {
+                    //_rb.AddForce(_dir.normalized * playerManagement.MovePower, ForceMode.Force);
+                    _rb.velocity = _dir.normalized * playerManagement.MovePower;
+                    //transform.position += _dir.normalized * playerManagement.MovePower * Time.deltaTime;
+                }
             }
         }
     }
 
     void OnPlace()
     {
-        //ê⁄ínîªíËÇÃÉåÉCÇÃî≠éÀà íuÇplayerÇÃà íuÇ…Ç∑ÇÈ
-        rayPos = transform.position;// + new Vector3(0,-0.1f,0);
+        //Êé•Âú∞Âà§ÂÆö„ÅÆ„É¨„Ç§„ÅÆÁô∫Â∞Ñ‰ΩçÁΩÆ„Çíplayer„ÅÆ‰ΩçÁΩÆ„Å´„Åô„Çã
+        rayPos = transform.position;/* + new Vector3(0,-0.1f,0)*/;
 
-        //ê⁄ínîªíËÇÃÉåÉCÇâ∫Ç…å¸ÇØÇÈ
+        //Êé•Âú∞Âà§ÂÆö„ÅÆ„É¨„Ç§„Çí‰∏ã„Å´Âêë„Åë„Çã
         Ray ray = new Ray(rayPos, Vector3.down);
 
-        //ê⁄ínîªíË
+        //Êé•Âú∞Âà§ÂÆö
         _onPlaceSwitch = Physics.Raycast(ray, playerManagement.GroundDistance);
 
-
         Debug.DrawRay(rayPos, Vector3.down * playerManagement.GroundDistance, Color.red);
+
+        if (_onPlaceSwitch)
+        {
+            _jumpSwitch = true;
+        }
     }
 
     void AnimControlMethod()
     {
-        Debug.Log(_idling);
-        if(_idling)
+        if (Mathf.Abs(h) + Mathf.Abs(v) > 0.04f)
         {
-            if (Mathf.Abs(h) + Mathf.Abs(v) > 0.04f)
+            if (_moveSwitch)
             {
                 playerManagement.animationCtrl.Play("A_Run");
             }
-            else
+        }
+        else
+        {
+            if (_moveSwitch)
             {
                 playerManagement.animationCtrl.Play("A_idle");
             }
         }
-        
 
         if (Input.GetButtonDown("Roll"))
         {
             _idling = false;
+            _moveSwitch = false;
             playerManagement.animationCtrl.Play("A_roll_front");
-            playerManagement.animationCtrl.SetPlaybackDelegate(Sawadanosio);
+            playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
         }
 
 
-        //à⁄ìÆån
+        if (Input.GetButtonDown("Slide"))
+        {
+            _idling = false;
+            _moveSwitch = false;
+            playerManagement.animationCtrl.Play("Running Slide");
+            playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (_jumpSwitch && _onPlaceSwitch)
+            {
+                _idling = false;
+                _moveSwitch = false;
+                _jumpSwitch = false;
+                playerManagement.animationCtrl.Play("Jump");
+
+                playerManagement.animationCtrl.SetPlaybackDelegate(JumpFinish);
+            }
+        }
+
+
+
+
+        //ÁßªÂãïÁ≥ª
         //_anim.SetFloat("Speed", _rb.velocity.magnitude);
 
         //if (h == 0 && v == 0)
@@ -143,8 +179,8 @@ public class PlayerMove : MonoBehaviour
         //}
 
 
-        ////////////////////////////////////////////////////////////////////////óvâ¸ëP
-        ////ÉçÅ[ÉäÉìÉO
+        ////////////////////////////////////////////////////////////////////////Ë¶ÅÊîπÂñÑ
+        ////„É≠„Éº„É™„É≥„Ç∞
         //if (Input.GetButtonDown("Roll"))
         //{
         //    if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_idle") || _anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run"))
@@ -153,7 +189,7 @@ public class PlayerMove : MonoBehaviour
         //    }
         //}
 
-        ////ÉXÉâÉCÉfÉBÉìÉO
+        ////„Çπ„É©„Ç§„Éá„Ç£„É≥„Ç∞
         //if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_Run") && !_anim.IsInTransition(0))
         //{
         //    if (Input.GetButtonDown("Slide"))
@@ -162,9 +198,9 @@ public class PlayerMove : MonoBehaviour
         //    }
         //}
 
+        //Hello!! ü¶Äü¶Äü¶Ä
 
-
-        ////ÉWÉÉÉìÉv
+        ////„Ç∏„É£„É≥„Éó
         //if (_jumpSwitch && _onPlaceSwitch)
         //{
         //    if (Input.GetButtonDown("Jump"))
@@ -182,39 +218,38 @@ public class PlayerMove : MonoBehaviour
         //}
 
     }
-    void Sawadanosio()
+
+    public void AddForceFront(float x)
     {
-        _idling = false;
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(transform.forward * x, ForceMode.Impulse);
     }
 
-    void On(string x)
+    public void AddForceUp(float x)
     {
-        if (x == "Roll")
-        {
-            _rollSwitch = true;
-        }
-        else if (x == "Move")
-        {
-            _moveSwitch = true;
-        }
-        else if (x == "Jump")
-        {
-            _jumpSwitch = true;
-        }
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(transform.up * x, ForceMode.Impulse);
     }
-    void Off(string x)
+
+    //else
+    //{
+    //    _rb.AddForce(transform.up * x, ForceMode.Impulse);
+    //}
+
+    void AnimFinish()
     {
-        if (x == "Roll")
-        {
-            _rollSwitch = false;
-        }
-        else if (x == "Move")
-        {
-            _moveSwitch = false;
-        }
-        else if (x == "Jump")
-        {
-            _jumpSwitch = false;
-        }
+        //if (_anim.GetCurrentAnimatorStateInfo(0).IsName("A_roll_front"))
+        //{
+        _idling = true;
+        _moveSwitch = true;
+        //}
     }
+    void JumpFinish()
+    {
+        _idling = true;
+        _moveSwitch = true;
+        _jumpSwitch = true;
+    }
+
+
 }
