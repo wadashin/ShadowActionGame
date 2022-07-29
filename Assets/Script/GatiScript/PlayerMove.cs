@@ -41,7 +41,7 @@ public class PlayerMove : MonoBehaviour
         {
             _dir = (Vector3.forward * v + Vector3.right * h).normalized;
             _dir = new Vector3(_dir.x, _rb.velocity.y, _dir.z);
-            _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
+            _dir = new Vector3(playerManagement.PlayerCam.transform.TransformDirection(_dir).x,0, playerManagement.PlayerCam.transform.TransformDirection(_dir).z);
         }
         else if (_rb.velocity.y < 0)
         {
