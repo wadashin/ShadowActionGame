@@ -27,6 +27,7 @@ public class AnimationCtrl : MonoBehaviour
     Callback _callback = null;
     string _animState = null;
 
+
     Queue<AnimStack> _animQueue = new Queue<AnimStack>();
 
     private void Awake()
@@ -126,7 +127,6 @@ public class AnimationCtrl : MonoBehaviour
             }
         }
 
-
         if (_callback != null)
         {
             if (!IsPlayingAnimation(_targetLayer))
@@ -145,5 +145,6 @@ public class AnimationCtrl : MonoBehaviour
             }
         }
     }
+
 
 }

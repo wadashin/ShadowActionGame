@@ -56,12 +56,16 @@ public class PlayerMove : MonoBehaviour
             _dir = new Vector3(_dir.x, _rb.velocity.y, _dir.z);
             _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
         }
-        else
-        {
-            _dir = (Vector3.forward * v + Vector3.right * h).normalized;
-            //_dir += new Vector3(0, _rb.velocity.y, 0);
-            _dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
-        }
+        //else
+        //{
+        //    if(_rb.velocity.y < 0)
+        //    {
+                
+        //    }
+        //    //_dir = (Vector3.forward * v + Vector3.right * h).normalized;
+        //    //_dir += new Vector3(0, _rb.velocity.y, 0);
+        //    //_dir = playerManagement.PlayerCam.transform.TransformDirection(_dir);
+        //}
 
         ////////////////////移動に応じた向きの変更機能////////////////////
         //前回からどこに進んだかをベクトルで取得
@@ -83,15 +87,13 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_jumpSwitch)
+        if (_onPlaceSwitch)
         {
             if (_moveSwitch)
             {
                 if (_rb.velocity.magnitude < playerManagement.MoveMaxSpeed)
                 {
-                    //_rb.AddForce(_dir.normalized * playerManagement.MovePower, ForceMode.Force);
                     _rb.velocity = _dir.normalized * playerManagement.MovePower;
-                    //transform.position += _dir.normalized * playerManagement.MovePower * Time.deltaTime;
                 }
             }
         }
@@ -110,24 +112,24 @@ public class PlayerMove : MonoBehaviour
 
         Debug.DrawRay(rayPos, Vector3.down * playerManagement.GroundDistance, Color.red);
 
-        if (_onPlaceSwitch)
-        {
-            _jumpSwitch = true;
-        }
+        //if (_onPlaceSwitch)
+        //{
+        //    _jumpSwitch = true;
+        //}
     }
 
     void AnimControlMethod()
     {
         if (Mathf.Abs(h) + Mathf.Abs(v) > 0.04f)
         {
-            if (_moveSwitch)
+            if (_moveSwitch && _onPlaceSwitch)
             {
                 playerManagement.animationCtrl.Play("A_Run");
             }
         }
         else
         {
-            if (_moveSwitch)
+            if (_moveSwitch && _onPlaceSwitch)
             {
                 playerManagement.animationCtrl.Play("A_idle");
             }
@@ -152,7 +154,7 @@ public class PlayerMove : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            if (_jumpSwitch && _onPlaceSwitch)
+            if (_onPlaceSwitch && _moveSwitch)
             {
                 _idling = false;
                 _moveSwitch = false;
@@ -227,7 +229,7 @@ public class PlayerMove : MonoBehaviour
 
     public void AddForceUp(float x)
     {
-        _rb.velocity = Vector3.zero;
+        _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
         _rb.AddForce(transform.up * x, ForceMode.Impulse);
     }
 
