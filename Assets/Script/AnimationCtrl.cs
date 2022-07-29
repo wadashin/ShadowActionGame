@@ -54,7 +54,7 @@ public class AnimationCtrl : MonoBehaviour
     }
 
     /// <summary>
-    /// アニメーションを切り替える
+    /// アニメーションを切り替える(ループ)
     /// </summary>
     /// <param name="stateName">ステート名</param>
     /// <param name="dur">遅延時間</param>
@@ -63,8 +63,24 @@ public class AnimationCtrl : MonoBehaviour
     {
         Active();
         _animator.CrossFade(stateName, dur);
+        //_animator.Play(stateName/*, _targetLayer, dur*/);
         //Debug.Log("Play:" + stateName);
     }
+    /// <summary>
+    /// アニメーションを切り替える(非ループ)
+    /// </summary>
+    /// <param name="stateName">ステート名</param>
+    /// <param name="dur">遅延時間</param>
+    /// <returns></returns>
+    public void Play2(string stateName, float dur = 0.0f)
+    {
+        Active();
+        //_animator.CrossFade(stateName, dur);
+        _animator.Play(stateName, _targetLayer, dur);
+        //Debug.Log("Play:" + stateName);
+    }
+
+
 
     /// <summary>
     /// 再生が終わったら次のアニメーションを流す
