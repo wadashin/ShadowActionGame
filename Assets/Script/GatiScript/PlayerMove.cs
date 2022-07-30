@@ -32,11 +32,11 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ////////////////////停止時と接地時の移動速度の切り替え////////////////////
+        ////////////////////横入力と縦入力の取得////////////////////
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-
+        ////////////////////接地時と非接地時かつ落下中の入力と移動の切り替え////////////////////
         if (_onPlaceSwitch)
         {
             _dir = (Vector3.forward * v + Vector3.right * h).normalized;
@@ -61,6 +61,7 @@ public class PlayerMove : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
         }
+
         ////////////////////関数群////////////////////
         OnPlace();
 
@@ -137,6 +138,19 @@ public class PlayerMove : MonoBehaviour
         }
 
         if (Input.GetButtonDown("Jump"))
+        {
+            if (_onPlaceSwitch && _moveSwitch)
+            {
+                _moveSwitch = false;
+                playerManagement.animationCtrl.Play("Jump");
+                playerManagement.animationCtrl.SetPlaybackDelegate(JumpFinish);
+            }
+        }
+    }
+
+    void AttackMethod()
+    {
+        if(Input.GetButtonDown("Attack1"))
         {
             if (_onPlaceSwitch && _moveSwitch)
             {
