@@ -22,6 +22,11 @@ public class PlayerManagement : MonoBehaviour
     [SerializeField]
     float _moveMaxSpeed;
 
+    [Tooltip("コンボ1のアニメーションステートたち")]
+    [SerializeField]
+    string[] _attackStateNames;
+
+
     public Camera PlayerCam
     {
         get { return _playerCam; }
@@ -40,6 +45,10 @@ public class PlayerManagement : MonoBehaviour
     {
         get { return _moveMaxSpeed; }
     }
+    public string[] AttackStateStack
+    {
+        get { return _attackStateNames; }
+    }
 
 
 
@@ -54,5 +63,4 @@ public class PlayerManagement : MonoBehaviour
     {
         
     }
-    
 }

@@ -14,6 +14,9 @@ public class PlayerMove : MonoBehaviour
     bool _moveSwitch = true;
     bool _rollSwitch = true;
 
+    bool _attackSwitch = true;
+    bool _attack = false;
+
     Vector3 _dir;
     Vector3 rayPos;
     Vector3 _latestPos;
@@ -21,6 +24,8 @@ public class PlayerMove : MonoBehaviour
     Animator _anim;
 
     PlayerManagement playerManagement;
+
+    List<AnimationState> _attackStateStack = new List<AnimationState>();
 
     void Start()
     {
@@ -66,6 +71,7 @@ public class PlayerMove : MonoBehaviour
         OnPlace();
 
         AnimControlMethod();
+        AttackMethod();
     }
 
     private void FixedUpdate()
@@ -150,16 +156,27 @@ public class PlayerMove : MonoBehaviour
 
     void AttackMethod()
     {
-        if(Input.GetButtonDown("Attack1"))
+        if (Input.GetButtonDown("Attack1"))
         {
-            if (_onPlaceSwitch && _moveSwitch)
+            if (_attackSwitch)
             {
-                _moveSwitch = false;
-                playerManagement.animationCtrl.Play("Jump");
-                playerManagement.animationCtrl.SetPlaybackDelegate(JumpFinish);
+                if (_onPlaceSwitch && _moveSwitch)
+                {
+                    _moveSwitch = false;
+                    _attackSwitch = false;
+                    playerManagement.animationCtrl.Play("A_combo_01_1");
+                    playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
+                }
             }
         }
+        //}
+        //if (Input.GetButtonDown("Attack1"))
+        //{
+        //    _attack = true;
+        //}
     }
+
+    ////////////////////アニメーションイベント関数コーナー////////////////////
 
     /// <summary>
     /// 前方に力を加えるアニメーション用メソッド
@@ -180,6 +197,22 @@ public class PlayerMove : MonoBehaviour
         _rb.velocity = new Vector3(_rb.velocity.x / 2, 0, _rb.velocity.z / 2);
         _rb.AddForce(transform.up * x, ForceMode.Impulse);
     }
+
+    public void AnimSet()
+    {
+        for(int i = 0; i < playerManagement.AttackStateStack.Length; i++)
+        {
+            //_attackStateStack.Add(playerManagement.animationCtrl.)
+        }
+    }
+
+
+    public void AttackTrue()
+    {
+        _attackSwitch = true;
+    }
+
+
     void AnimFinish()
     {
         _moveSwitch = true;
