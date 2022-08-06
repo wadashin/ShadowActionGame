@@ -46,7 +46,7 @@ public class PlayerMove : MonoBehaviour
         {
             _dir = (Vector3.forward * v + Vector3.right * h).normalized;
             _dir = new Vector3(_dir.x, _rb.velocity.y, _dir.z);
-            _dir = new Vector3(playerManagement.PlayerCam.transform.TransformDirection(_dir).x,0, playerManagement.PlayerCam.transform.TransformDirection(_dir).z);
+            _dir = new Vector3(playerManagement.PlayerCam.transform.TransformDirection(_dir).x, 0, playerManagement.PlayerCam.transform.TransformDirection(_dir).z);
         }
         else if (_rb.velocity.y < 0)
         {
@@ -72,6 +72,7 @@ public class PlayerMove : MonoBehaviour
 
         AnimControlMethod();
         AttackMethod();
+        Debug.Log(_attackSwitch);
     }
 
     private void FixedUpdate()
@@ -124,10 +125,10 @@ public class PlayerMove : MonoBehaviour
         {
             if (_moveSwitch && _onPlaceSwitch)
             {
-                _moveSwitch = false;
+                AllMoveFalse();
                 //AddForceFront(16);
                 playerManagement.animationCtrl.Play2("A_roll_front"/*, 0.1f*/);
-                playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
+                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
             }
         }
 
@@ -136,10 +137,10 @@ public class PlayerMove : MonoBehaviour
         {
             if (_moveSwitch && _onPlaceSwitch)
             {
-                _moveSwitch = false;
+                AllMoveFalse();
                 //AddForceFront(17);
                 playerManagement.animationCtrl.Play("Running Slide");
-                playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
+                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
             }
         }
 
@@ -147,9 +148,9 @@ public class PlayerMove : MonoBehaviour
         {
             if (_onPlaceSwitch && _moveSwitch)
             {
-                _moveSwitch = false;
+                AllMoveFalse();
                 playerManagement.animationCtrl.Play("Jump");
-                playerManagement.animationCtrl.SetPlaybackDelegate(JumpFinish);
+                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
             }
         }
     }
@@ -158,15 +159,17 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetButtonDown("Attack1"))
         {
-            if (_attackSwitch)
+            if (_onPlaceSwitch && _moveSwitch && _attackSwitch)
             {
-                if (_onPlaceSwitch && _moveSwitch)
-                {
-                    _moveSwitch = false;
-                    _attackSwitch = false;
-                    playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[0]);
-                    playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
-                }
+                AllMoveFalse();
+                playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[0]);
+                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
+            }
+            else if (!_moveSwitch && _attackSwitch)
+            {
+                AllMoveFalse();
+                playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[1]);
+                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
             }
         }
         //}
@@ -222,5 +225,15 @@ public class PlayerMove : MonoBehaviour
         _moveSwitch = true;
     }
 
+    void AllMoveTrue()
+    {
+        _moveSwitch = true;
+        _attackSwitch = true;
+    }
+    public void AllMoveFalse()
+    {
+        _moveSwitch = false;
+        _attackSwitch = false;
+    }
 
 }
