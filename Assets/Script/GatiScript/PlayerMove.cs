@@ -164,7 +164,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     _moveSwitch = false;
                     _attackSwitch = false;
-                    playerManagement.animationCtrl.Play("A_combo_01_1");
+                    playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[0]);
                     playerManagement.animationCtrl.SetPlaybackDelegate(AnimFinish);
                 }
             }
@@ -198,13 +198,13 @@ public class PlayerMove : MonoBehaviour
         _rb.AddForce(transform.up * x, ForceMode.Impulse);
     }
 
-    public void AnimSet()
-    {
-        for(int i = 0; i < playerManagement.AttackStateStack.Length; i++)
-        {
-            //_attackStateStack.Add(playerManagement.animationCtrl.)
-        }
-    }
+    //public void AnimSet()
+    //{
+    //    for(int i = 0; i < playerManagement.AttackStateStack.Length; i++)
+    //    {
+    //        //_attackStateStack.Add(playerManagement.animationCtrl.)
+    //    }
+    //}
 
 
     public void AttackTrue()
