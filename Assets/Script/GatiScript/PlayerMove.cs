@@ -6,6 +6,8 @@ public class PlayerMove : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    int conboCount = 0;
+
     float h;
     float v;
 
@@ -72,7 +74,6 @@ public class PlayerMove : MonoBehaviour
 
         AnimControlMethod();
         AttackMethod();
-        Debug.Log(_attackSwitch);
     }
 
     private void FixedUpdate()
@@ -157,20 +158,23 @@ public class PlayerMove : MonoBehaviour
 
     void AttackMethod()
     {
-        if (Input.GetButtonDown("Attack1"))
+        if (Input.GetButtonDown("Attack1") && conboCount < playerManagement.AttackStateStack.Length)
         {
             if (_onPlaceSwitch && _moveSwitch && _attackSwitch)
             {
                 AllMoveFalse();
                 playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[0]);
-                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
+                conboCount++;
+                playerManagement.animationCtrl.SetPlaybackDelegate(AttackFinish);
             }
             else if (!_moveSwitch && _attackSwitch)
             {
                 AllMoveFalse();
-                playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[1]);
-                playerManagement.animationCtrl.SetPlaybackDelegate(AllMoveTrue);
+                playerManagement.animationCtrl.Play(playerManagement.AttackStateStack[conboCount]);
+                conboCount++;
+                playerManagement.animationCtrl.SetPlaybackDelegate(AttackFinish);
             }
+            Debug.Log(conboCount);
         }
         //}
         //if (Input.GetButtonDown("Attack1"))
@@ -234,6 +238,13 @@ public class PlayerMove : MonoBehaviour
     {
         _moveSwitch = false;
         _attackSwitch = false;
+    }
+
+    public void AttackFinish()
+    {
+        _moveSwitch = true;
+        _attackSwitch = true;
+        conboCount = 0;
     }
 
 }
