@@ -170,11 +170,10 @@ public class PlayerMove : MonoBehaviour
             else if (!_moveSwitch && _attackSwitch)
             {
                 AllMoveFalse();
-                playerManagement.animationCtrl.Play2(playerManagement.AttackStateStack[conboCount]);
+                playerManagement.animationCtrl.Play2(playerManagement.AttackStateStack[conboCount], 0.1f);
                 conboCount++;
                 playerManagement.animationCtrl.SetPlaybackDelegate(AttackFinish);
             }
-            Debug.Log(conboCount);
         }
         //}
         //if (Input.GetButtonDown("Attack1"))
