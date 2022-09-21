@@ -13,9 +13,9 @@ public class BakeMesh : MonoBehaviour
     // BakeMeshObjをインスタンスした際のSkinnedMeshRendererリスト
     List<GameObject> BakeCloneMeshList = new List<GameObject>();
 
-    int MaxCloneCount = 4;       // 残像数
+    int MaxCloneCount = 5;       // 残像数
     int CloneCount = 0;
-    float FlameCountMax = 0.03f;    // 残像を更新する頻度
+    float FlameCountMax = 0.01f;    // 残像を更新する頻度
     int FlameCount = 0;
 
     void Start()

@@ -59,6 +59,7 @@ public class PlayerMove : MonoBehaviour
 
         ////////////////////移動に応じた向きの変更機能////////////////////
         //前回からどこに進んだかをベクトルで取得
+
         Vector3 diff = transform.position - _latestPos;
         //横にしか回転しないようにする
         diff = new Vector3(diff.x, 0, diff.z);
@@ -68,6 +69,8 @@ public class PlayerMove : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
         }
+
+
 
         ////////////////////関数群////////////////////
         OnPlace();
@@ -160,6 +163,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetButtonDown("Attack1") && conboCount < playerManagement.AttackStateStack.Length)
         {
+            _rb.velocity = Vector3.zero;
             if (_onPlaceSwitch && _moveSwitch && _attackSwitch)
             {
                 AllMoveFalse();
