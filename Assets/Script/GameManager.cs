@@ -4,7 +4,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] int _stageNum = 0;
+
+    EnemyScript[] enemyScripts;
+
+    GameObject player = default;
+
+
+    public GameObject Player
+    {
+        get { return player; }
+        set { player = value; }
+    }
+
     void Start()
     {
         

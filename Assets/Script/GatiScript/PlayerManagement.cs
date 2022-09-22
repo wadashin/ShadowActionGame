@@ -6,6 +6,7 @@ public class PlayerManagement : MonoBehaviour
 {
     PlayerMove playerMove;
     PlayerStatus playerStatus;
+    GameManager gameManager;
     public AnimationCtrl animationCtrl;
 
     [SerializeField]
@@ -72,7 +73,8 @@ public class PlayerManagement : MonoBehaviour
     }
     void Start()
     {
-        
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        gameManager.Player = this.gameObject;
     }
     void OnDrawGizmosSelected()
     {
