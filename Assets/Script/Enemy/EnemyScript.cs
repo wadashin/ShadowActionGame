@@ -22,7 +22,6 @@ public class EnemyScript : MonoBehaviour
     void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        WakeUp();
     }
 
     void Update()
@@ -33,7 +32,7 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    void WakeUp()
+    public void WakeUp()
     {
         _operation = true;
         StartCoroutine("Attack");

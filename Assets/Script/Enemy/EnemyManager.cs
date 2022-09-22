@@ -24,6 +24,8 @@ public class EnemyManager : MonoBehaviour
 
     EnemyScript _enemyScript;
 
+    public RoomScript _myRoom;
+
 
     public float MovePower
     {
@@ -80,6 +82,17 @@ public class EnemyManager : MonoBehaviour
     public void Hit(int power)
     {
         Hp -= power;
+        if(Hp <= 0)
+        {
+            Defeat();
+        }
+    }
+
+    public void Defeat()
+    {
+        Debug.Log(1);
+        _myRoom.EnemysGain(this);
+        _enemyScript.StopAllCoroutines();
     }
 
 }
