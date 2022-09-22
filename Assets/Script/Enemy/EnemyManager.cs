@@ -22,6 +22,8 @@ public class EnemyManager : MonoBehaviour
     float _maxEnemyShield;
     float _enemyShield;
 
+    EnemyScript _enemyScript;
+
 
     public float MovePower
     {
@@ -46,11 +48,13 @@ public class EnemyManager : MonoBehaviour
     {
         Hp = _maxEnemyHp;
         Shield = _maxEnemyShield;
+        _enemyScript = GetComponent<EnemyScript>();
     }
 
     public void Damage(int power)
     {
-        if(Shield <= 0)
+        _enemyScript.BeAttacked();//UŒ‚ŠÔŠu‚ÌƒŠƒZƒbƒg
+        if (Shield <= 0)
         {
             Hit(power);
         }
@@ -63,6 +67,14 @@ public class EnemyManager : MonoBehaviour
     public void Guard(int power)
     {
         Shield -= power;
+        if(Shield > 0)
+        {
+            _enemyScript.Guard();
+        }
+        else
+        {
+            _enemyScript.BreakGuard();
+        }
     }
 
     public void Hit(int power)

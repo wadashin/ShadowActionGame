@@ -14,6 +14,10 @@ public class EnemyScript : MonoBehaviour
 
     [SerializeField] GameObject _energyBall;
 
+    [SerializeField] ParticleSystem _guardParticle;
+
+    [SerializeField] ParticleSystem _breakParticle;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,22 +35,45 @@ public class EnemyScript : MonoBehaviour
 
     void WakeUp()
     {
-        Debug.Log(1);
         _operation = true;
         StartCoroutine("Attack");
     }
 
+    /// <summary>
+    /// プレイヤーから攻撃を受けた際に呼ばれる関数　　グーグル先生曰く攻撃を受けるって意味らしい
+    /// </summary>
+    public void BeAttacked()
+    {
+        StopAllCoroutines();
+        StartCoroutine("Attack");
+    }
+
+    /// <summary>
+    /// ガードした時に呼ばれる関数
+    /// </summary>
+    public void Guard()
+    {
+        _guardParticle.Play();
+    }
+
+    /// <summary>
+    /// ガードブレイクされた時に呼ばれる関数
+    /// </summary>
+    public void BreakGuard()
+    {
+        _breakParticle.Play();
+    }
+
+
     IEnumerator Attack()
     {
-        Debug.Log(2);
-        yield return new WaitForSecondsRealtime(11);
+        yield return new WaitForSecondsRealtime(Random.Range(7,12));
         StartCoroutine("RapidFire");
         StartCoroutine("Attack");
     }
 
     IEnumerator RapidFire()
     {
-        Debug.Log(3);
         for (int i = 0; i < _rapidNumber; i++)
         {
             Instantiate(_energyBall, _attackPoint.position, this.transform.rotation);

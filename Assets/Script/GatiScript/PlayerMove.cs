@@ -60,14 +60,18 @@ public class PlayerMove : MonoBehaviour
         ////////////////////移動に応じた向きの変更機能////////////////////
         //前回からどこに進んだかをベクトルで取得
 
-        Vector3 diff = transform.position - _latestPos;
-        //横にしか回転しないようにする
-        diff = new Vector3(diff.x, 0, diff.z);
-        //前回のPositionの更新
-        _latestPos = transform.position;
-        if (diff.magnitude > 0.01f)
+        //Vector3 diff = transform.position - _latestPos;
+        ////横にしか回転しないようにする
+        //diff = new Vector3(diff.x, 0, diff.z);
+        ////前回のPositionの更新
+        //_latestPos = transform.position;
+        //if (diff.magnitude > 0.01f)
+        //{
+        //    transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
+        //}
+        if (v != 0 || h != 0)
         {
-            transform.rotation = Quaternion.LookRotation(diff); //向きを変更する
+            transform.localRotation = Quaternion.LookRotation(_dir);
         }
 
 

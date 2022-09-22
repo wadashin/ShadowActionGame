@@ -15,7 +15,7 @@ public class BakeMesh : MonoBehaviour
 
     int MaxCloneCount = 5;       // 残像数
     int CloneCount = 0;
-    float FlameCountMax = 0.01f;    // 残像を更新する頻度
+    float FlameCountMax = 0.02f;    // 残像を更新する頻度
     int FlameCount = 0;
 
     void Start()
