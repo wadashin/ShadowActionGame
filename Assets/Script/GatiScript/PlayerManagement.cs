@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManagement : MonoBehaviour
 {
@@ -34,6 +35,44 @@ public class PlayerManagement : MonoBehaviour
     [SerializeField]
     string[] _attackStateNames;
 
+    [Tooltip("HP")]
+    [SerializeField]
+    int _hp;
+    [Tooltip("Shield")]
+    [SerializeField]
+    int _shield;
+
+    [Tooltip("level")]
+    float _level;
+    [Tooltip("levelスタック")]
+    float _levelStack;
+
+    [Tooltip("HPのスライダー")]
+    [SerializeField]
+    Slider _hpSlider;
+    [Tooltip("Shieldのスライダー")]
+    [SerializeField]
+    Slider _shieldSlider;
+    [Tooltip("levelのimage")]
+    [SerializeField]
+    Image _levelGage;
+    [Tooltip("levelスタックのimage")]
+    [SerializeField]
+    Image _levelStackImage;
+
+    [Tooltip("PlayerのCanvas")]
+    [SerializeField]
+    Canvas _playerCanvas;
+    [Tooltip("level増加の演出")]
+    [SerializeField]
+    GameObject _levelUpStaging;
+
+    [SerializeField]
+    ParticleSystem _guardParticle;
+
+    [SerializeField]
+    ParticleSystem _breakParticle;
+
     //攻撃範囲の中心
     [SerializeField]
     Vector3 _rangeCenter = default;
@@ -65,6 +104,34 @@ public class PlayerManagement : MonoBehaviour
         get { return _attackStateNames; }
     }
 
+    public float Level
+    {
+        get { return _level; }
+        set
+        {
+            _level = value;
+            if(_level >= 100)
+            {
+                Level -= 100;
+                LevelStack++;
+            }
+            _levelGage.fillAmount = _level / 100;
+        }
+    }
+    public float LevelStack
+    {
+        get { return _levelStack; }
+        set
+        {
+            if (_levelStack < 4)
+            {
+                _levelStack = value;
+
+                _levelStackImage.fillAmount = _levelStack / 4;
+            }
+        }
+    }
+
     private void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -75,6 +142,9 @@ public class PlayerManagement : MonoBehaviour
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         gameManager.Player = this.gameObject;
+
+        _hpSlider.value = _hp;
+        _shieldSlider.value = _shield;
     }
     void OnDrawGizmosSelected()
     {
@@ -90,6 +160,54 @@ public class PlayerManagement : MonoBehaviour
             + this.transform.right * _rangeCenter.x;
         return center;
     }
+
+    public void Damage(int power)
+    {
+        if (_shield <= 0)
+        {
+            Hit(power);
+        }
+        else
+        {
+            Guard(power);
+        }
+    }
+
+    public void Guard(int power)
+    {
+        _shield -= power;
+        _shieldSlider.value = _shield;
+        if (_shield > 0)
+        {
+            Guard();
+        }
+        else
+        {
+            BreakGuard();
+        }
+    }
+
+    public void Hit(int power)
+    {
+        _hp -= power;
+        _hpSlider.value = _hp;
+        if (_hp <= 0)
+        {
+
+        }
+    }
+
+    void Guard()
+    {
+        _guardParticle.Play();
+    }
+
+    void BreakGuard()
+    {
+        _breakParticle.Play();
+    }
+
+
     /// <summary>
     /// 攻撃をする。アニメーションイベントから呼んでね
     /// </summary>
@@ -106,6 +224,8 @@ public class PlayerManagement : MonoBehaviour
             {
                 //rb.AddForce(this.transform.forward * Vector3.Distance(gameObject.transform.position, c.gameObject.transform.position) * _attackPower, ForceMode.Impulse);
                 enemyManager.Damage(_AttackPower);
+                Instantiate(_levelUpStaging, _playerCanvas.transform);
+                Level += 10;
                 StartCoroutine("HitStop");
             }
 
@@ -117,5 +237,14 @@ public class PlayerManagement : MonoBehaviour
         _animator.speed = 0;
         yield return new WaitForSecondsRealtime(0.2f);
         _animator.speed = 1;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("EnergyBall"))
+        {
+            Debug.Log("ここ要変更");
+            Damage(10);
+        }
     }
 }

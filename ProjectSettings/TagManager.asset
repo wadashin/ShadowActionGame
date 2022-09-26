@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - GameManager
+  - EnergyBall
   layers:
   - Default
   - TransparentFX

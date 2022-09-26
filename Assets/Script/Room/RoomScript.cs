@@ -31,4 +31,12 @@ public class RoomScript : MonoBehaviour
             Destroy(_door);
         }
     }
+
+    public void EnemysWakeUp()
+    {
+        foreach (EnemyManager enemy in _enemys)
+        {
+            enemy._enemyScript.WakeUp();
+        }
+    }
 }

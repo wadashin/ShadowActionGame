@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour
     float _maxEnemyShield;
     float _enemyShield;
 
-    EnemyScript _enemyScript;
+    public EnemyScript _enemyScript;
 
     public RoomScript _myRoom;
 
@@ -90,9 +90,9 @@ public class EnemyManager : MonoBehaviour
 
     public void Defeat()
     {
-        Debug.Log(1);
         _myRoom.EnemysGain(this);
         _enemyScript.StopAllCoroutines();
+        Destroy(this.gameObject);
     }
 
 }

@@ -66,7 +66,7 @@ public class EnemyScript : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSecondsRealtime(Random.Range(7,12));
+        yield return new WaitForSecondsRealtime(Random.Range(10,20));
         StartCoroutine("RapidFire");
         StartCoroutine("Attack");
     }

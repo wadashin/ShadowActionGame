@@ -20,4 +20,27 @@ public class EnergyBallScript : MonoBehaviour
     {
         transform.position += transform.forward * 0.1f;
     }
+
+    IEnumerator Dath()
+    {
+        yield return new WaitForSecondsRealtime(6);
+        Destroy(this.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(!other.gameObject.CompareTag("Enemy"))
+        {
+            //if(TryGetComponent(out PlayerManagement playerManagement))
+            //{
+            //    Debug.Log("Ç±Ç±óvïœçX");
+            //    playerManagement.Damage(10);
+            //}
+            //else
+            //{
+            //    Debug.Log(1);
+            //}
+            Destroy(this.gameObject);
+        }
+    }
 }

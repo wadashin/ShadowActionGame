@@ -220,7 +220,7 @@ public class PlayerMove : MonoBehaviour
     //    }
     //}
 
-
+    /////////////////////////////////////////////各ステータスの変更////////////////////////////////////////////////////////
     public void AttackTrue()
     {
         _attackSwitch = true;
